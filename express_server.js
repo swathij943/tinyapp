@@ -14,14 +14,14 @@ const generateRandomString = function() {
   return randomString;
 };
 
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({exended: true}));
-
 /* Keeps track of all Long/Input URLs and their created short URLS. */
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
 };
+
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -68,6 +68,13 @@ app.post("/urls", (req, res) => {
   urlDatabase[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
 });
+
+/* Responds to '/urls/:shortURL/delete' POST request by deleting :shortURL in database, redirects to main '/urls' page */
+app.post("/urls/:shortURL/delete", (req, res) => {
+  const shortURL = req.params.shortURL;
+  delete urlDatabase[shortURL];
+  res.redirect('/urls');
+})
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
