@@ -23,6 +23,11 @@
           </tr>
         </thead>
         <tbody>
+          <% if (!user) { %>
+            <div class="alert alert-warning" role="alert">
+                Please <a href="/login" class="alert-link">login</a> or <a href="/register" class="alert-link">register</a> to see your beautiful collection of Short URLs.
+              </div>
+          <% } else { %>
           <% for(let url in urls) { %>
           <tr>
             <td><%= url %></td>
@@ -38,6 +43,7 @@
               </form>
             </td>
           </tr>
+        <% } %>
         <% } %>
         </tbody>
       </table>

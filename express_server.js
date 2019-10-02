@@ -22,6 +22,16 @@ const emailAlreadyExists = function(email) {
     }
   } return false;
 };
+/* Returns an object of URLs specific to the argument userID */
+const urlsForUser = function(id) {
+  const userUrls = {};
+  for (const shortURL in urlDatabase) {
+    if (urlDatabase[shortURL].userID === id) {
+      userUrls[shortURL] = urlDatabase[shortURL];
+    }
+  } 
+  return userUrls;
+};
 
 /* Object with all Long URLs and their corresponding short URLS. */
 const urlDatabase = {
@@ -49,7 +59,7 @@ app.get("/", (req, res) => {
 /* Responds to '/urls' GET request with rendered HTML of urls_index.ejs. */
 app.get("/urls", (req, res) => {
   let templateVars = {
-    urls: urlDatabase,
+    urls: urlsForUser(req.cookies["user_id"]),
     user: users[req.cookies["user_id"]],
   };
   res.render('urls_index', templateVars);
@@ -88,8 +98,10 @@ app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL,
+    urlUserID: urlDatabase[req.params.shortURL].userID,
     user: users[req.cookies["user_id"]],
   };
+  console.log(templateVars);
   res.render("urls_show", templateVars);
 });
 
