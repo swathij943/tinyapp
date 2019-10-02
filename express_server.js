@@ -72,7 +72,14 @@ app.get("/register", (req, res) => {
     user: users[req.cookies["user_id"]],
   };
   res.render("urls_registration", templateVars);
-})
+});
+
+app.get("/login", (req, res) => {
+  let templateVars = {
+    user: users[req.cookies["user_id"]],
+  };
+  res.render("urls_login", templateVars);
+});
 
 /* Responds to '/urls/:shortURL' GET request with rendered HTML of urls_show.ejs with data specific to :shortURL */
 app.get("/urls/:shortURL", (req, res) => {
