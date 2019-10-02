@@ -33,7 +33,7 @@ const urlsForUser = function(id) {
   return userUrls;
 };
 
-/* Object with all Long URLs and their corresponding short URLS. */
+/* Object with all Long URLs and their corresponding short URLS and userIDs. */
 const urlDatabase = {
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "userRandomID"},
   "9sm5xK": { longURL: "http://www.google.com", userID: "userRandomID"},
@@ -69,12 +69,12 @@ app.get("/urls", (req, res) => {
 - if user is logged in, responds with rendered HTML of urls_new.ejs 
 - if user is not logged, redirects to 'login'*/
 app.get("/urls/new", (req, res) => {
-  let templateVars = {
-    user: users[req.cookies["user_id"]],
-  };
   if (!req.cookies["user_id"]) {
     res.redirect("/login");
   } else {
+    let templateVars = {
+      user: users[req.cookies["user_id"]],
+    };
     res.render("urls_new", templateVars);
   }
 });
