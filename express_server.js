@@ -33,10 +33,6 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
-
 /* Responds to '/urls' GET request with rendered HTML of urls_index.ejs. */
 app.get("/urls", (req, res) => {
   let templateVars = {
