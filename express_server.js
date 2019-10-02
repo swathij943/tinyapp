@@ -108,7 +108,7 @@ app.get("/urls/:shortURL", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL].longURL;
   if (longURL === undefined) {
-    res.send(302);
+    res.status(302);
   } else {
     res.redirect(longURL);
   }
@@ -119,9 +119,9 @@ app.post("/register", (req, res) => {
   const submittedPassword = req.body.password;
 
   if (!submittedEmail || !submittedPassword) {
-    res.send(400, "Please include both a valid email and password");
+    res.status(400).send("Please include both a valid email and password");
   } else if (emailAlreadyExists(submittedEmail)) {
-    res.send(400, "An account already exists for this email address");
+    res.status(400).send("An account already exists for this email address");
   } else {
     const newUserID = generateRandomString();
     users[newUserID] = {
@@ -153,7 +153,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
     delete urlDatabase[shortURL];
     res.redirect('/urls');
   } else {
-    res.send(401);
+    res.status(401);
   }
 });
 
@@ -166,7 +166,7 @@ app.post("/urls/:id", (req, res) => {
     urlDatabase[shortURL].longURL = req.body.newURL;
     res.redirect('/urls');
   } else {
-    res.send(401);
+    res.status(401);
   }
 });
 
@@ -177,11 +177,11 @@ app.post("/login", (req, res) => {
 
 
   if (!emailAlreadyExists(email)) {
-    res.send(403, "There is no account associated with this email address");
+    res.status(403).send("There is no account associated with this email address");
   } else {
     const userID = emailAlreadyExists(email);
     if (!bcrypt.compareSync(password, users[userID].password)) {
-      res.send(403, "The password you entered does not match the one associated with the provided email address");
+      res.status(403).send("The password you entered does not match the one associated with the provided email address");
     } else {
       res.cookie('user_id', userID);
       res.redirect("/urls");
