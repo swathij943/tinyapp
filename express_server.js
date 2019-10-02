@@ -101,7 +101,6 @@ app.get("/urls/:shortURL", (req, res) => {
     urlUserID: urlDatabase[req.params.shortURL].userID,
     user: users[req.cookies["user_id"]],
   };
-  console.log(templateVars);
   res.render("urls_show", templateVars);
 });
 
@@ -142,22 +141,33 @@ app.post("/urls", (req, res) => {
     longURL: req.body.longURL,
     userID: req.cookies["user_id"],
   };
-  console.log(urlDatabase);
   res.redirect(`/urls/${shortURL}`);
 });
 
 /* Responds to '/urls/:shortURL/delete' POST request by deleting :shortURL in database, redirects to main '/urls' page */
 app.post("/urls/:shortURL/delete", (req, res) => {
-  const shortURL = req.params.shortURL;
-  delete urlDatabase[shortURL];
-  res.redirect('/urls');
+  const userID = req.cookies["user_id"];
+  const userUrls = urlsForUser(userID);
+  if (Object.keys(userUrls).includes(req.params.shortURL)) {
+    const shortURL = req.params.shortURL;
+    delete urlDatabase[shortURL];
+    res.redirect('/urls');
+  } else {
+    res.send(401);
+  }
 });
 
 /* Reponds to '/urls/:id' POST request by saving the newURL from the request input in the database, and redirecting to '/urls' */
 app.post("/urls/:id", (req, res) => {
-  const shortURL = req.params.id;
-  urlDatabase[shortURL] = req.body.newURL;
-  res.redirect('/urls');
+  const userID = req.cookies["user_id"];
+  const userUrls = urlsForUser(userID);
+  if (Object.keys(userUrls).includes(req.params.id)) {
+    const shortURL = req.params.id;
+    urlDatabase[shortURL].longURL = req.body.newURL;
+    res.redirect('/urls');
+  } else {
+    res.send(401);
+  }
 });
 
 /* Responds to '/login' POST request by creating a cookie with the request input user_id, and redirecting to '/urls' */
