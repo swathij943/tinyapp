@@ -18,7 +18,7 @@ const generateRandomString = function() {
 const emailAlreadyExists = function(email) {
   for (const user in users) {
     if (users[user].email === email) {
-      return true
+      return users[user].id
     }
   } return false;
 };
@@ -142,16 +142,27 @@ app.post("/urls/:id", (req, res) => {
   res.redirect('/urls');
 });
 
-/* Responds to '/login' POST request by creating a cookie with the request input username, and redirecting to '/urls' */
+/* Responds to '/login' POST request by creating a cookie with the request input user_id, and redirecting to '/urls' */
 app.post("/login", (req, res) => {
-  const username = req.body.username;
-  res.cookie('username', username);
-  res.redirect('/urls');
+  const email = req.body.email;
+  const password = req.body.password;
+
+  if (!emailAlreadyExists(email)) {
+    res.send(403, "There is no account associated with this email address");
+  } else {
+    const userID = emailAlreadyExists(email);
+    if (users[userID].password !== password) {
+      res.send(403, "The password you entered does not match the one associated with the provided email address");
+    } else {
+      res.cookie('user_id', userID);
+      res.redirect("/urls");
+    }
+  }
 });
 
 /* Responds to '/logout' POST request by removing the cookie of the logged in user, and redirecting to '/urls' */
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect('/urls');
 });
 
