@@ -1,8 +1,8 @@
 const express = require("express");
-const app = express();
-const PORT = 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
+const app = express();
+const PORT = 8080;
 
 /* Generates a random string, used for creating short URLs. */
 const generateRandomString = function() {
@@ -15,7 +15,7 @@ const generateRandomString = function() {
   return randomString;
 };
 
-/* Keeps track of all Long/Input URLs and their created short URLS. */
+/* Object with alll Long URLs and their corresponding short URLS. */
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
@@ -60,7 +60,7 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-/* Responds to '/u/:shortURL' GET request with the corresponding long URL, from the urlDatabase */
+/* Responds to '/u/:shortURL' GET request by redirecting to the corresponding long URL, from the urlDatabase */
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
   if (longURL === undefined) {
@@ -84,18 +84,21 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   res.redirect('/urls');
 });
 
+/* Reponds to '/urls/:id' POST request by saving the newURL from the request input in the database, and redirecting to '/urls' */
 app.post("/urls/:id", (req, res) => {
   const shortURL = req.params.id;
   urlDatabase[shortURL] = req.body.newURL;
   res.redirect('/urls');
 });
 
+/* Responds to '/login' POST request by creating a cookie with the request input username, and redirecting to '/urls' */
 app.post("/login", (req, res) => {
   const username = req.body.username;
   res.cookie('username', username);
   res.redirect('/urls');
 });
 
+/* Responds to '/logout' POST request by removing the cookie of the logged in user, and redirecting to '/urls' */
 app.post("/logout", (req, res) => {
   res.clearCookie('username');
   res.redirect('/urls');
