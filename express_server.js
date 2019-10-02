@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 8080;
+const bcrypt = require('bcrypt');
 
 /* Generates a random string, used for creating short URLs and userIDs */
 const generateRandomString = function() {
@@ -35,17 +36,16 @@ const urlsForUser = function(id) {
 
 /* Object with all Long URLs and their corresponding short URLS and userIDs. */
 const urlDatabase = {
-  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "userRandomID"},
-  "9sm5xK": { longURL: "http://www.google.com", userID: "userRandomID"},
+  // "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "userRandomID"},
 };
 
 /* Object with all user data */
 const users = {
-  "userRandomID": {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
-  }
+  // "userRandomID": {
+  //   id: "userRandomID",
+  //   email: "user@example.com",
+  //   password: "purple-monkey-dinosaur"
+  // }
 }
 
 app.set("view engine", "ejs");
@@ -127,7 +127,7 @@ app.post("/register", (req, res) => {
     users[newUserID] = {
       id: newUserID,
       email: submittedEmail,
-      password: submittedPassword
+      password: bcrypt.hashSync(submittedPassword, 10),
     };
       res.cookie('user_id', newUserID);
       res.redirect("/urls");
@@ -175,11 +175,12 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
+
   if (!emailAlreadyExists(email)) {
     res.send(403, "There is no account associated with this email address");
   } else {
     const userID = emailAlreadyExists(email);
-    if (users[userID].password !== password) {
+    if (!bcrypt.compareSync(password, users[userID].password)) {
       res.send(403, "The password you entered does not match the one associated with the provided email address");
     } else {
       res.cookie('user_id', userID);
