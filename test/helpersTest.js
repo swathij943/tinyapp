@@ -111,6 +111,5 @@ describe('cookieHasUser', function() {
     const nonExistantCookie = cookieHasUser("user3RandomID", testUsers);
     const expectedOutput = false;
     assert.equal(nonExistantCookie, expectedOutput);
-  })
- 
+  });
 });

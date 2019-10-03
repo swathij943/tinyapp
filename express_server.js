@@ -7,11 +7,9 @@ const PORT = 8080;
 
 const { generateRandomString, emailHasUser, userIdFromEmail, urlsForUser, cookieHasUser } = require("./helpers");
 
-const urlDatabase = {
-};
+const urlDatabase = {};
 
-const users = {
-};
+const users = {};
 
 app.set("view engine", "ejs");
 
@@ -39,7 +37,7 @@ app.get("/urls", (req, res) => {
     urls: urlsForUser(req.session.user_id, urlDatabase),
     user: users[req.session.user_id],
   };
-  res.render('urls_index', templateVars);
+  res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
