@@ -36,7 +36,7 @@ const userIdFromEmail = function(email, userDatabase) {
 };
 
 /* Returns an object of short URLs specific to the passed in userID */
-const urlsForUser = function(id) {
+const urlsForUser = function(id, urlDatabase) {
   const userUrls = {};
   for (const shortURL in urlDatabase) {
     if (urlDatabase[shortURL].userID === id) {
@@ -84,7 +84,7 @@ app.get("/", (req, res) => {
 
 app.get("/urls", (req, res) => {
   let templateVars = {
-    urls: urlsForUser(req.session.user_id),
+    urls: urlsForUser(req.session.user_id, urlDatabase),
     user: users[req.session.user_id],
   };
   res.render('urls_index', templateVars);
@@ -207,7 +207,7 @@ app.post("/logout", (req, res) => {
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   const userID = req.session.user_id;
-  const userUrls = urlsForUser(userID);
+  const userUrls = urlsForUser(userID, urlDatabase);
   if (Object.keys(userUrls).includes(req.params.shortURL)) {
     const shortURL = req.params.shortURL;
     delete urlDatabase[shortURL];
@@ -219,7 +219,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post("/urls/:id", (req, res) => {
   const userID = req.session.user_id;
-  const userUrls = urlsForUser(userID);
+  const userUrls = urlsForUser(userID, urlDatabase);
   if (Object.keys(userUrls).includes(req.params.id)) {
     const shortURL = req.params.id;
     urlDatabase[shortURL].longURL = req.body.newURL;
