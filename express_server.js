@@ -25,7 +25,7 @@ app.use(cookieSession({
 /* Below are ROUTES */
 
 app.get("/", (req, res) => {
-  if (req.session.user_id) {
+  if (cookieHasUser(req.session.user_id, users)) {
     res.redirect("/urls");
   } else {
     res.redirect("/login");
