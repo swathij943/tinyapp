@@ -84,7 +84,7 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  if (!req.session.user_id) {
+  if (!cookieHasUser(req.session.user_id, users)) {
     res.redirect("/login");
   } else {
     let templateVars = {
