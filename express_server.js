@@ -57,7 +57,11 @@ app.use(cookieSession({
 }));
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  if (req.session.user_id) {
+    res.redirect("/urls");
+  } else {
+    res.redirect("/login");
+  }
 });
 
 /* Responds to '/urls' GET request with rendered HTML of urls_index.ejs. */
