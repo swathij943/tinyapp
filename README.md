@@ -10,7 +10,7 @@ TinyApp is a full stack web application that allows users to shorten long URLs (
 
 *Main page with an active user, displaying created links*
 
-!["Screenshot of URLs page with user logged in"](https://github.com/caitlining/tinyapp/blob/master/docs/urls-page-user.png?raw=true)
+!["Screenshot of URLs page with user logged in"](https://github.com/caitlining/tinyapp/blob/master/docs/short-url-display-page-for-user.png?raw=true)
 
 *Registration page*
 
