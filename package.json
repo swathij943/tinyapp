@@ -1,37 +1,19 @@
 {
   "name": "tinyapp",
   "version": "1.0.0",
-  "description": "URL Shortener",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon -L express_server.js",
-    "test": "./node_modules/mocha/bin/mocha"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/caitlining/tinyapp.git"
-  },
-  "keywords": [],
-  "author": "Caitlin Ing https://github.com/caitlining",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/caitlining/tinyapp/issues"
-  },
-  "homepage": "https://github.com/caitlining/tinyapp#readme",
-  "dependencies": {
-    "bcrypt": "2.0.0",
-    "body-parser": "^1.19.0",
-    "cookie-session": "^1.3.3",
-    "ejs": "^2.7.1",
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^6.2.1",
-    "nodemon": "^1.19.3"
-  },
+  "description": "TinyApp is a full stack web application that allows users to shorten long URLs (similar to bit.ly). TinyApp is built with Node and Express.",
+  "main": "express_server.js",
   "directories": {
     "doc": "docs",
     "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }
