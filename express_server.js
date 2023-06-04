@@ -100,11 +100,34 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { email, password } = req.body;
+
+  // Check if email or password are empty strings
+  if (email === "" || password === "") {
+    res.status(400).send("Email or password cannot be empty");
+    return;
+  }
+
+  // Helper function to find user by email
+  const findUserByEmail = (email) => {
+    for (const userId in users) {
+      if (users[userId].email === email) {
+        return users[userId];
+      }
+    }
+    return null;
+  };
+
+  // Check if email already exists in users object
+  if (findUserByEmail(email)) {
+    res.status(400).send("Email already registered");
+    return;
+  }
+
   const userId = generateRandomString();
   const newUser = {
     id: userId,
     email,
-    password
+    password,
   };
   users[userId] = newUser;
   res.cookie("user_id", userId);
