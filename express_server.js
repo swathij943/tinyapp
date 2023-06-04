@@ -90,16 +90,38 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  // Perform login logic here, such as validating the credentials against the users object
+  // Helper function to find user by email
+  const findUserByEmail = (email) => {
+    for (const userId in users) {
+      if (users[userId].email === email) {
+        return users[userId];
+      }
+    }
+    return null;
+  };
 
-  // Redirect the user to the appropriate page after successful login
+  // Look up user by email
+  const user = findUserByEmail(email);
+
+  // Check if user with that email exists
+  if (!user) {
+    res.status(403).send("Email not found");
+    return;
+  }
+
+  // Check if password matches
+  if (user.password !== password) {
+    res.status(403).send("Incorrect password");
+    return;
+  }
+
+  res.cookie("user_id", user.id);
   res.redirect("/urls");
 });
 
-
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
-  res.redirect("/urls");
+  res.clearCookie("user_id");
+  res.redirect("/login");
 });
 
 app.get("/register", (req, res) => {
