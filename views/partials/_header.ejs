@@ -16,12 +16,8 @@
           <button type="submit" class="btn btn-light">Logout</button>
         </form>
       <% } else { %>
-        <form method="POST" action="/login" class="form-inline ml-auto">
-          <div class="form-group">
-            <input type="text" class="form-control" name="username" placeholder="Username">
-          </div>
-          <button type="submit" class="btn btn-light">Login</button>
-        </form>
+        <a class="nav-item nav-link" href="/register">Register</a>
+        <a class="nav-item nav-link" href="/login">Login</a>
       <% } %>
     </div>
   </nav>

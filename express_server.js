@@ -83,11 +83,19 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls");
 });
 
+app.get("/login", (req, res) => {
+  res.render("urls_login");
+});
+
 app.post("/login", (req, res) => {
-  const username = req.body.username;
-  res.cookie("username", username);
+  const { email, password } = req.body;
+
+  // Perform login logic here, such as validating the credentials against the users object
+
+  // Redirect the user to the appropriate page after successful login
   res.redirect("/urls");
 });
+
 
 app.post("/logout", (req, res) => {
   res.clearCookie("username");
