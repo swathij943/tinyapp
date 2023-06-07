@@ -17,8 +17,6 @@ TinyApp is a full stack web application that allows users to shorten long URLs (
 
 !["Page to create new short URl"](https://github.com/swathij943/tinyapp/blob/master/docs/new_URL_page.PNG)
 
-*For a more in depth look at TinyApp, and to create your own short links, I encourage you to give it a try!*
-
 
 ## Dependencies
 
