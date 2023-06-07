@@ -4,6 +4,7 @@ const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 const PORT = 8080; // default port 8080
 
+//helper functions
 const { getUserByEmail } = require('./helpers');
 
 const { urlsForUser } = require("./helpers");
@@ -53,9 +54,13 @@ function generateRandomString() {
   return result;
 }
 
+//All Routings
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
+
+//home page routing
 
 app.get("/urls", (req, res) => {
   const userId = req.session.user_id;
@@ -71,6 +76,8 @@ app.get("/urls", (req, res) => {
   }
 });
 
+//access 'Create URL' page
+
 app.get("/urls/new", (req, res) => {
   const templateVars = {
     user: users[req.session.user_id],
@@ -78,22 +85,7 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
-// app.get("/urls/:id", (req, res) => {
-//   const shortURL = req.params.id;
-//   const url = urlDatabase[shortURL];
-
-//   if (url) {
-//     const longURL = url.longURL;
-//     const templateVars = {
-//       id: shortURL,
-//       longURL: longURL,
-//       user: users[req.session.user_id],
-//     };
-//     res.render("urls_show", templateVars);
-//   } else {
-//     res.status(404).send("URL not found");
-//   }
-// });
+//URL routing
 
 app.get("/urls/:id", (req, res) => {
   const shortURL = req.params.id;
@@ -128,6 +120,8 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+//to access site
+
 app.get("/u/:id", (req, res) => {
   const shortURL = req.params.id;
   const url = urlDatabase[shortURL];
@@ -140,6 +134,7 @@ app.get("/u/:id", (req, res) => {
   }
 });
 
+//create new URL
 app.post("/urls", (req, res) => {
   const longURL = req.body.longURL;
   const userID = req.session.user_id;
@@ -151,11 +146,7 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
-// app.post("/urls/:id/delete", (req, res) => {
-//   const shortURL = req.params.id;
-//   delete urlDatabase[shortURL];
-//   res.redirect("/urls");
-// });
+//URL delete routing
 
 app.post("/urls/:id/delete", (req, res) => {
   const shortURL = req.params.id;
@@ -186,17 +177,7 @@ app.post("/urls/:id/delete", (req, res) => {
   res.redirect("/urls");
 });
 
-// app.post("/urls/:id", (req, res) => {
-//   const shortURL = req.params.id;
-//   const newLongURL = req.body.longURL;
-//   const url = urlDatabase[shortURL];
-
-//   if (url) {
-//     url.longURL = newLongURL;
-//     res.redirect("/urls");
-//   } else {
-//     res.status
-// }});
+//URL edit routing
 app.post("/urls/:id", (req, res) => {
   const shortURL = req.params.id;
   const newLongURL = req.body.longURL;
@@ -209,6 +190,8 @@ app.post("/urls/:id", (req, res) => {
     res.status(404).send("URL not found");
   }
 });
+
+//get & validate login
 
 app.get("/login", (req, res) => {
   res.render("urls_login");
@@ -243,7 +226,6 @@ app.post("/login", (req, res) => {
   }
 
   req.session.user_id = user.id;
-  // res.cookie("user_id", user.id);
   res.redirect("/urls");
 });
 
@@ -251,6 +233,8 @@ app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/login");
 });
+
+//get & create new profile
 
 app.get("/register", (req, res) => {
   res.render("urls_registration");
@@ -292,6 +276,8 @@ app.post("/register", (req, res) => {
   req.session.user_id = userId;
   res.redirect("/urls");
 });
+
+//listening port
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
