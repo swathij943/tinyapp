@@ -9,11 +9,13 @@ TinyApp is a full stack web application that allows users to shorten long URLs (
 
 ## Final Product
 
-!["Welcome page display which prompts the user to login or register"]()
+!["Welcome page display which prompts the user to login or register"](https://github.com/swathij943/tinyapp/blob/master/docs/welcomepage.PNG)
 
-!["Main page containing all of the user's short URLs"]()
+!["Main page containing all of the user's short URLs"](https://github.com/swathij943/tinyapp/blob/master/docs/urlspage.PNG)
 
-!["Edit page allowing users to update their short URLs"]()
+!["Edit page allowing users to update their short URLs"](https://github.com/swathij943/tinyapp/blob/master/docs/editURLpage.PNG)
+
+!["Page to create new short URl"](https://github.com/swathij943/tinyapp/blob/master/docs/newURLpage.PNG)
 
 *Specific short URL page where user owns the short URL*
 
