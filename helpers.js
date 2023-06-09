@@ -35,4 +35,10 @@ const comparePasswords = function(password, hashedPassword) {
   return bcrypt.compareSync(password, hashedPassword);
 };
 
-module.exports = { getUserByEmail, generateRandomString, urlsForUser, comparePasswords };
+const displayError = (message, user, statusCode, res) => {
+  const error = { errorMsg: message, user, statusCode};
+  res.render('urls_error', error);
+  return;
+};
+
+module.exports = { getUserByEmail, generateRandomString, urlsForUser, comparePasswords, displayError };

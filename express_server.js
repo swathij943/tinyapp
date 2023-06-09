@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const PORT = 8080; // default port 8080
 
 //helper functions
-const { getUserByEmail } = require('./helpers');
+const { getUserByEmail, displayError } = require('./helpers');
 
 const { urlsForUser } = require("./helpers");
 
@@ -57,7 +57,7 @@ function generateRandomString() {
 //All Routings
 
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  res.redirect('/urls');
 });
 
 //home page routing
@@ -82,7 +82,11 @@ app.get("/urls/new", (req, res) => {
   const templateVars = {
     user: users[req.session.user_id],
   };
-  res.render("urls_new", templateVars);
+  if (templateVars.user) {
+    res.render('urls_new', templateVars);
+  } else {
+    res.redirect('/login');
+  }
 });
 
 //URL routing
@@ -126,12 +130,20 @@ app.get("/u/:id", (req, res) => {
   const shortURL = req.params.id;
   const url = urlDatabase[shortURL];
 
-  if (url) {
+  if (!url) {
+    displayError("ShortURL doesn't exist", users[req.session.user_id], 404, res);
+    return;
+  }
+
+  const substring = 'http://';
+  if (url.longURL.includes(substring)) {
     const longURL = url.longURL;
     res.redirect(longURL);
   } else {
-    res.status(404).send("URL not found");
+    const longURL = `http://${url.longURL}`;
+    res.redirect(longURL);
   }
+
 });
 
 //create new URL
@@ -183,12 +195,13 @@ app.post("/urls/:id", (req, res) => {
   const newLongURL = req.body.longURL;
   const url = urlDatabase[shortURL];
 
-  if (url) {
+  if (req.session.user_id === urlDatabase[req.params.id].userID) {
     url.longURL = newLongURL;
     res.redirect("/urls");
   } else {
-    res.status(404).send("URL not found");
+    displayError("Unable to edit/no URL ownership", users[req.session.user_id], 403, res);
   }
+
 });
 
 //get & validate login
